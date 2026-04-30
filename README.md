@@ -29,7 +29,7 @@ Para que el ecosistema funcione sin latencia y evadiendo restricciones o firewal
 
 1.  Activar el Hotspot desde el dispositivo móvil del host.
 2.  Conectar todos los equipos centrales (MacBook Pro, iPad) a esta red.
-3.  Obtener la IP Local de la máquina host (Ej. `172.20.10.6`) para configurar los servidores.
+3.  Obtener la IP Local de la máquina host (Ej. `172.20.10.7`) para configurar los servidores.
 
 ### 2. Secuencia de Inicio
 
