@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COSMOS — Instalación Audiovisual</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep: #02020a;
+    --void: #060614;
+    --indigo: #0d0d2b;
+    --accent: #c8a8f5;
+    --glow: #7c4dff;
+    --cold: #4fc3f7;
+    --warm: #ff6b6b;
+    --gold: #ffd700;
+    --text: #e8e4f0;
+    --muted: #8a84a0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* ── STARFIELD ── */
+  #starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .nebula-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 60%, rgba(124,77,255,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 30% 40%, rgba(79,195,247,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 70% 30%, rgba(200,168,245,0.06) 0%, transparent 60%);
+    animation: nebula-shift 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes nebula-shift {
+    from { opacity: 0.7; transform: scale(1) rotate(0deg); }
+    to   { opacity: 1;   transform: scale(1.04) rotate(1.5deg); }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    color: var(--glow);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fade-up 0.8s 0.3s forwards;
+    margin-bottom: 1.2rem;
+  }
+
+  h1.title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(5rem, 18vw, 14rem);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff 20%, var(--accent) 50%, var(--cold) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0;
+    animation: fade-up 1s 0.6s forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  h1.title::after {
+    content: 'COSMOS';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(124,77,255,0.5), rgba(79,195,247,0.3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: blur(18px);
+    z-index: -1;
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%,100% { opacity: 0.5; }
+    50%      { opacity: 0.9; }
+  }
+
+  .hero-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    color: var(--muted);
+    max-width: 580px;
+    line-height: 1.7;
+    margin-top: 2rem;
+    opacity: 0;
+    animation: fade-up 1s 1s forwards;
+  }
+
+  .hero-sub em {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .scroll-hint {
+    margin-top: 4rem;
+    opacity: 0;
+    animation: fade-up 1s 1.6s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--glow), transparent);
+    animation: scroll-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-pulse {
+    0%,100% { transform: scaleY(1); opacity: 0.6; }
+    50%      { transform: scaleY(1.3); opacity: 1; }
+  }
+
+  /* ── MOON ── */
+  .moon-wrap {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 2.5rem;
+    opacity: 0;
+    animation: fade-in 1.5s 0.8s forwards;
+  }
+
+  .moon {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff 0%, var(--accent) 30%, var(--glow) 70%, var(--deep) 100%);
+    box-shadow:
+      0 0 30px rgba(124,77,255,0.6),
+      0 0 80px rgba(124,77,255,0.3),
+      0 0 140px rgba(200,168,245,0.15);
+    animation: moon-rotate 20s linear infinite, moon-pulse 5s ease-in-out infinite;
+  }
+
+  @keyframes moon-rotate {
+    from { filter: hue-rotate(0deg); }
+    to   { filter: hue-rotate(30deg); }
+  }
+
+  @keyframes moon-pulse {
+    0%,100% { box-shadow: 0 0 30px rgba(124,77,255,0.6), 0 0 80px rgba(124,77,255,0.3); }
+    50%      { box-shadow: 0 0 50px rgba(79,195,247,0.8), 0 0 120px rgba(79,195,247,0.4); }
+  }
+
+  .moon-ring {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,168,245,0.2);
+    animation: ring-spin 30s linear infinite;
+  }
+
+  .moon-ring::before {
+    content: '';
+    position: absolute;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cold);
+    top: 18px; left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 8px var(--cold);
+  }
+
+  @keyframes ring-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    position: relative;
+    z-index: 2;
+    padding: 7rem 2rem;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--glow);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--glow);
+  }
+
+  h2.section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.05;
+    margin-bottom: 2rem;
+  }
+
+  /* ── CONCEPT ── */
+  #concept {
+    border-top: 1px solid rgba(200,168,245,0.08);
+  }
+
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .concept-text p {
+    color: var(--muted);
+    line-height: 1.9;
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .concept-text p strong {
+    color: var(--text);
+  }
+
+  .trio {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .trio-item {
+    padding: 1.2rem 1.5rem;
+    border: 1px solid rgba(200,168,245,0.12);
+    border-left: 3px solid;
+    background: rgba(255,255,255,0.02);
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .trio-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(124,77,255,0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .trio-item:hover::before { opacity: 1; }
+
+  .trio-item:nth-child(1) { border-left-color: var(--glow); }
+  .trio-item:nth-child(2) { border-left-color: var(--cold); }
+  .trio-item:nth-child(3) { border-left-color: var(--warm); }
+
+  .trio-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .trio-item:nth-child(1) .trio-label { color: var(--glow); }
+  .trio-item:nth-child(2) .trio-label { color: var(--cold); }
+  .trio-item:nth-child(3) .trio-label { color: var(--warm); }
+
+  .trio-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .trio-desc {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+
+  /* ── ARCHITECTURE ── */
+  #architecture {
+    background: rgba(13,13,43,0.4);
+    border-top: 1px solid rgba(200,168,245,0.06);
+    border-bottom: 1px solid rgba(200,168,245,0.06);
+  }
+
+  .arch-table-wrap {
+    margin-top: 3rem;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+
+  thead tr {
+    border-bottom: 1px solid rgba(200,168,245,0.2);
+  }
+
+  th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--glow);
+    padding: 0.8rem 1.2rem;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  td {
+    padding: 1rem 1.2rem;
+    color: var(--muted);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+    transition: color 0.2s;
+  }
+
+  tr:hover td { color: var(--text); background: rgba(124,77,255,0.05); }
+
+  td:first-child {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    color: var(--text);
+    font-size: 0.9rem;
+  }
+
+  .port-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    background: rgba(124,77,255,0.15);
+    border: 1px solid rgba(124,77,255,0.3);
+    border-radius: 3px;
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── STRUCTURE ── */
+  #structure { }
+
+  .folders {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .folder {
+    padding: 2rem;
+    border: 1px solid rgba(200,168,245,0.1);
+    background: rgba(255,255,255,0.02);
+    position: relative;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .folder:hover {
+    transform: translateY(-4px);
+    border-color: rgba(200,168,245,0.25);
+  }
+
+  .folder-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .folder-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .folder-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── SETUP ── */
+  #setup {
+    background: linear-gradient(to bottom, transparent, rgba(13,13,43,0.6), transparent);
+  }
+
+  .steps {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: rgba(124,77,255,0.2);
+    line-height: 1;
+    padding-top: 0.2rem;
+  }
+
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.7rem;
+    color: var(--accent);
+  }
+
+  .step-body {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .step-body code {
+    background: rgba(124,77,255,0.12);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    color: var(--cold);
+    font-size: 0.8rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 5rem 2rem;
+    border-top: 1px solid rgba(200,168,245,0.07);
+  }
+
+  .footer-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--muted), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+  }
+
+  .footer-sub {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+  }
+
+  .github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.8rem 2rem;
+    border: 1px solid rgba(200,168,245,0.25);
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .github-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(124,77,255,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+
+  .github-link:hover::before { transform: translateX(0); }
+  .github-link:hover { border-color: var(--glow); }
+
+  .author-block {
+    margin: 2rem auto;
+    padding: 1.5rem 2.5rem;
+    border: 1px solid rgba(200,168,245,0.15);
+    display: inline-block;
+    position: relative;
+  }
+
+  .author-block::before {
+    content: 'AUTORA';
+    position: absolute;
+    top: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--deep);
+    padding: 0 0.8rem;
+    font-size: 0.55rem;
+    letter-spacing: 0.4em;
+    color: var(--glow);
+  }
+
+  .author-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+
+  .author-detail {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.2rem;
+  }
+
+  .author-line {
+    font-size: 0.68rem;
+    color: rgba(138,132,160,0.6);
+    letter-spacing: 0.08em;
+  }
+
+  .credit {
+    margin-top: 3rem;
+    font-size: 0.58rem;
+    color: rgba(138,132,160,0.3);
+    letter-spacing: 0.2em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,168,245,0.2), transparent);
+    margin: 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .concept-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .folders { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .folders { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="nebula-bg"></div>
+  <p class="hero-eyebrow">Instalación Audiovisual Interactiva</p>
+  <h1 class="title">COSMOS</h1>
+  <div class="moon-wrap">
+    <div class="moon-ring"></div>
+    <div class="moon"></div>
+  </div>
+  <p class="hero-sub">
+    Un ecosistema audiovisual vivo moldeado por la interacción colectiva.<br>
+    <em>Público · Performer · Pulso Sonoro.</em> Tres fuerzas que dan forma a lo inmaterial.
+  </p>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONCEPT -->
+<section id="concept">
+  <div class="container">
+    <div class="concept-grid">
+      <div class="concept-text">
+        <p class="section-label">Concepto</p>
+        <h2 class="section-title">Un diálogo<br>a tres bandas</h2>
+        <p>Cosmos propone una conversación entre <strong>sonido, imagen y presencia humana</strong>. La obra no es fija: respira, cambia de color, colapsa hacia el vórtice o se expande en estrellas.</p>
+        <p>Cada espectador se convierte en autor. Desde su propio dispositivo, tiñe la Luna con colores en tiempo real. El performer guía la tensión narrativa. El audio sincroniza el parpadeo.</p>
+        <p>Es una exploración de cómo las <strong>interfaces web pueden difuminar la barrera</strong> entre espectador y obra.</p>
+      </div>
+      <div class="trio">
+        <div class="trio-item">
+          <div class="trio-label">Capa 01</div>
+          <div class="trio-name">Pulso Sonoro</div>
+          <div class="trio-desc">Live coding en Strudel. El kick drum sincroniza el parpadeo lunar via OSC.</div>
+        </div>
+        <div class="trio-item">
+          <div class="trio-label">Capa 02</div>
+          <div class="trio-name">Performer</div>
+          <div class="trio-desc">Controla los estados visuales desde iPad. Estrellas → Vórtice → Nebulosa.</div>
+        </div>
+        <div class="trio-item">
+          <div class="trio-label">Capa 03</div>
+          <div class="trio-name">Público Activo</div>
+          <div class="trio-desc">Datos RGB en tiempo real desde smartphones. El color de la Luna es colectivo.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="container">
+    <p class="section-label">Arquitectura</p>
+    <h2 class="section-title">Red local<br>distribuida</h2>
+    <p style="color:var(--muted);font-size:0.85rem;max-width:600px;line-height:1.8;">OSC + WebSockets garantizan comunicación simultánea y de baja latencia entre todos los nodos del ecosistema.</p>
+    <div class="arch-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Componente</th>
+            <th>Plataforma</th>
+            <th>Puerto</th>
+            <th>Función</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Audio (Pulsar)</td>
+            <td>Strudel + OSC Bridge</td>
+            <td><span class="port-badge">8080 UDP</span></td>
+            <td>Sincroniza parpadeo lunar con el kick drum <code>bd</code></td>
+          </tr>
+          <tr>
+            <td>Performer</td>
+            <td>iPad + Open Stage Control</td>
+            <td><span class="port-badge">9000 UDP</span></td>
+            <td>Controla transiciones de estados y ciclo evolutivo</td>
+          </tr>
+          <tr>
+            <td>Público</td>
+            <td>Smartphones + Node.js / Socket.io</td>
+            <td><span class="port-badge">7000 UDP</span></td>
+            <td>Envía color RGB en tiempo real → tiñe la Luna</td>
+          </tr>
+          <tr>
+            <td>Servidor Web</td>
+            <td>Node.js</td>
+            <td><span class="port-badge">3000 HTTP</span></td>
+            <td>Interfaz del espectador vía QR</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STRUCTURE -->
+<section id="structure">
+  <div class="container">
+    <p class="section-label">Repositorio</p>
+    <h2 class="section-title">Estructura<br>modular</h2>
+    <div class="folders">
+      <div class="folder">
+        <div class="folder-icon">🎞</div>
+        <div class="folder-name">/Visuales</div>
+        <div class="folder-desc">Archivo <code>.toe</code> de TouchDesigner. Síntesis visual y recepción OSC de los tres nodos.</div>
+      </div>
+      <div class="folder">
+        <div class="folder-icon">🖥</div>
+        <div class="folder-name">/Servidor</div>
+        <div class="folder-desc">Entorno Node.js. <code>server.js</code> + carpeta <code>/public</code> con la interfaz HTML del espectador.</div>
+      </div>
+      <div class="folder">
+        <div class="folder-icon">🎛</div>
+        <div class="folder-name">/Control</div>
+        <div class="folder-desc">Layout de Open Stage Control para el performer. Panel táctil del iPad.</div>
+      </div>
+      <div class="folder">
+        <div class="folder-icon">🎵</div>
+        <div class="folder-name">/Audio</div>
+        <div class="folder-desc">Partitura generativa en texto plano. Live coding con Strudel, escala C lidio.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SETUP -->
+<section id="setup">
+  <div class="container">
+    <p class="section-label">Operación</p>
+    <h2 class="section-title">Cómo ejecutar<br>la obra</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div>
+          <div class="step-title">Preparación de Red</div>
+          <div class="step-body">
+            Activar el <strong>Hotspot móvil</strong> del dispositivo host. Conectar MacBook Pro e iPad a esta red. Obtener la IP local del host (ej. <code>172.20.10.7</code>).
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div>
+          <div class="step-title">Audio</div>
+          <div class="step-body">
+            Cargar el script de <code>/Audio</code> en Strudel. Verificar salida de paquetes OSC hacia el puerto <code>8080</code>.
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div>
+          <div class="step-title">Visuales</div>
+          <div class="step-body">
+            Abrir el <code>.toe</code> en TouchDesigner. Confirmar que los tres nodos receptores <code>TDStrudelSync</code>, <code>oscin1</code> y <code>oscin2</code> estén activos en sus puertos.
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div>
+          <div class="step-title">Performer</div>
+          <div class="step-body">
+            Iniciar Open Stage Control con <code>port: 8082</code>, <code>send: 127.0.0.1:9000</code>. Abrir la interfaz en el iPad.
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">05</div>
+        <div>
+          <div class="step-title">Público</div>
+          <div class="step-body">
+            En la terminal: navegar a <code>/Servidor</code> y ejecutar <code>node server.js</code>. El público accede escaneando el QR apuntando a <code>http://[IP]:3000</code>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-title">COSMOS</div>
+  <div class="footer-sub">Instalación Audiovisual · UPB · 2026</div>
+  <div class="author-block">
+    <div class="author-name">Valentina Garzón</div>
+    <div class="author-detail">Ingeniería en Diseño de Entretenimiento Digital</div>
+    <div class="author-line">Línea de Experiencias Interactivas</div>
+  </div>
+  <a href="https://github.com/Valengp2006/Proyecto_Cosmos" class="github-link" target="_blank">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.17c-3.34.72-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.73.08-.73 1.2.09 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    Ver en GitHub
+  </a>
+  <div class="credit">Strudel &nbsp;·&nbsp; TouchDesigner &nbsp;·&nbsp; Node.js &nbsp;·&nbsp; Open Stage Control</div>
+</footer>
+
+<script>
+// STARFIELD
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let W, H, stars = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 280; i++) {
+    stars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.2 + 0.2,
+      a: Math.random(),
+      speed: Math.random() * 0.3 + 0.05,
+      twinkle: Math.random() * Math.PI * 2
+    });
+  }
+}
+
+function drawStars(t) {
+  ctx.clearRect(0, 0, W, H);
+  stars.forEach(s => {
+    s.twinkle += s.speed * 0.04;
+    const alpha = s.a * (0.5 + 0.5 * Math.sin(s.twinkle));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(220,210,255,${alpha})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+
+window.addEventListener('resize', () => { resize(); initStars(); });
+resize();
+initStars();
+requestAnimationFrame(drawStars);
+
+// SCROLL REVEAL (simple)
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.step, .folder, .trio-item').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
