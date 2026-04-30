@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmos - Control Público</title>
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body {
+            background-color: #05050A; /* Negro profundo, no ilumina la sala */
+            color: #E0E0E0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        h1 { color: #00FFCC; letter-spacing: 3px; font-weight: 300; }
+        p { margin-bottom: 40px; color: #888; font-size: 0.9rem; max-width: 80%; }
+        #color-picker-container { margin-top: 20px; filter: drop-shadow(0 0 20px rgba(255,255,255,0.1)); }
+    </style>
+</head>
+<body>
+    <h1>COSMOS</h1>
+    <p>Interacción Pública: Arrastra el selector para modificar el color de la Luna en el escenario.</p>
+
+    <div id="color-picker-container"></div>
+
+    <script>
+        const socket = io();
+
+        // Crear la interfaz de la rueda de color
+        const colorPicker = new iro.ColorPicker('#color-picker-container', {
+            width: 280,
+            color: "#ffffff",
+            layout: [
+                { component: iro.ui.Wheel },
+                { component: iro.ui.Slider, options: { sliderType: 'value' } } // Control de brillo
+            ]
+        });
+
+        // Evento: Cada vez que el dedo mueve el color, envíalo al servidor
+        colorPicker.on('color:change', function(color) {
+            socket.emit('color_change', color.rgb);
+        });
+    </script>
+</body>
+</html>

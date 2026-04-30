@@ -1,0 +1,158 @@
+// ============================================================
+//  C O S M O S 
+//  ─────────────────────────────────────────────────────────
+//  FASE 1  (~2:30)  Solo PIANO_ON = 1
+//  T1      (~0:40)  Activa PEDAL_ON, ECO_ON
+//  FASE 2  (~2:00)  Activa STRINGS_ON, BASS_ON
+//                   Silencia ECO_ON
+//  T2      (~0:30)  Activa BRASS_ON
+//  FASE 3  (~1:40)  Activa ORGAN_ON, PULSAR_ON
+//                   Sube STRINGS_ON (ya activo, el patrón cambia solo)
+//  T3      (~1:00)  Silencia en orden: PULSAR_ON → ORGAN_ON
+//                   → BRASS_ON → STRINGS_ON → BASS_ON
+//  FASE 1' (~1:00)  Solo PIANO_ON queda — siléncialo al final
+// ============================================================
+
+setcpm(26)
+
+// ── INTERRUPTORES ──────────────────────────────────────────
+const PIANO_ON   = 0   
+const ECO_ON      = 0
+const PEDAL_ON    = 0
+const STRINGS_ON = 0
+const BASS_ON    = 0
+const BRASS_ON   = 0
+const ORGAN_ON    = 0
+const PULSAR_ON   = 0
+
+// ── MOTIVOS ────────────────────────────────────────────────
+const mot1 = "<[0 ~ ~ ~] [~ ~ 4 ~] [~ 7 ~ ~] [~ ~ ~ 0]>"
+const mot2 = "<[0 ~ 4 ~] [7 ~ 4 2] [0 4 ~ 7] [~ 2 0 ~]>"
+const mot3 = "<[0 2 4 7] [2 4 7 11] [4 7 11 0] [7 11 0 4]>"
+
+// ── PIANO PRINCIPAL ────────────────────────────────────────
+const piano_pat = note("<0@8 1@8 2@8>".pick([mot1, mot2, mot3]))
+  .scale("C:lydian")
+  .sound("piano")
+  .octave("<4@16 5@8>")
+  .attack(0.01)
+  .release(3.0)
+  .room(2.5).roomsize(10)
+  .cutoff("<1600@16 3000@8>")
+
+$: stack(
+  piano_pat.gain(PIANO_ON ? 0.6 : 0),
+  piano_pat.osc()
+)
+
+// ── ECO DEL PIANO ──────────────────────────────────────────
+const eco_pat = note(mot1)
+  .scale("C:lydian")
+  .sound("piano")
+  .octave(5)
+  .attack(0.01)
+  .release(4.0)
+  .late(0.38)
+  .room(3).roomsize(10)
+  .cutoff(900)
+  .pan(0.55)
+
+$: stack(
+  eco_pat.gain(ECO_ON ? 0.07 : 0),
+  eco_pat.osc()
+)
+
+// ── PEDAL DE CUERDAS ───────────────────────────────────────
+const pedal_pat = note("<c2 g2 e2 b2>/8")
+  .sound("strings")
+  .attack(4.0)
+  .release(6.0)
+  .room(3).roomsize(10)
+  .cutoff(400)
+
+$: stack(
+  pedal_pat.gain(PEDAL_ON ? 0.18 : 0),
+  pedal_pat.osc()
+)
+
+// ── CUERDAS ────────────────────────────────────────────────
+const strings_pat = note("<[c3,g3]@8 [c3,e3,g3,b3]@8 [c3,e3,g3,b3,d4]@8>")
+  .sound("gm_violin")
+  .attack(1.8)
+  .release(3.0)
+  .room(2.5).roomsize(9)
+  .cutoff(sine.range(500, 2000).slow(9))
+  .pan(sine.range(-0.4, 0.4).slow(11))
+
+$: stack(
+  strings_pat.gain(STRINGS_ON ? 0.32 : 0),
+  strings_pat.osc()
+)
+
+// ── BAJO ───────────────────────────────────────────────────
+const bass_pat = note("<c1 ~ c1 ~ g0 ~ c1 ~>/2")
+  .sound("sine")
+  .attack(0.06)
+  .release(1.2)
+  .lpf(160)
+  .room(1.5)
+
+$: stack(
+  bass_pat.gain(BASS_ON ? 0.35 : 0),
+  bass_pat.osc()
+)
+
+// ── METALES SUAVES ─────────────────────────────────────────
+const brass_pat = note("<c3 ~ g3 ~ e3 ~ b2 ~>/4")
+  .sound("gm_french_horn")
+  .attack(2.5)
+  .release(4.0)
+  .room(2.8).roomsize(10)
+  .cutoff(sine.range(400, 1400).slow(13))
+  .pan(sine.range(-0.35, 0.35).slow(8))
+
+$: stack(
+  brass_pat.gain(BRASS_ON ? 0.28 : 0),
+  brass_pat.osc()
+)
+
+// ── ÓRGANO ─────────────────────────────────────────────────
+const organ_pat = note("<c2 ~ g2 ~>/8")
+  .sound("organ")
+  .attack(5.0)
+  .release(7.0)
+  .cutoff(sine.range(300, 900).slow(10))
+  .room(3).roomsize(10)
+
+$: stack(
+  organ_pat.gain(ORGAN_ON ? 0.38 : 0),
+  organ_pat.osc()
+)
+
+// ── PULSAR ─────────────────────────────────────────────────
+const pulsar_pat = note("<c2 ~ ~ ~> <c2 c2 ~ ~>") // Cambiamos c0 por c2
+  .sound("bd") 
+  .attack(0.08)
+  .release(3.5)
+  .lpf(800) // Abrimos el filtro de 110 a 800 para dejar pasar armónicos
+  .room(3).roomsize(10)
+
+$: stack(
+  pulsar_pat.gain(PULSAR_ON ? 0.8 : 0), // Subimos la ganancia a 0.8 para probar
+  pulsar_pat.osc()
+)
+
+
+// ── SHIMMER ────────────────────────────────────────────────
+const shimmer_pat = note("<e5 b5 g5 d6>/2")
+  .sound("sine")
+  .attack(2.5)
+  .release(4.0)
+  .lpf(3500)
+  .room(3).roomsize(10)
+  .pan(sine.range(-0.7, 0.7).slow(7))
+
+$: stack(
+  shimmer_pat.gain(ORGAN_ON ? 0.12 : 0),
+  shimmer_pat.osc()
+)
