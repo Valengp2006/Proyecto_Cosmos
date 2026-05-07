@@ -66,17 +66,27 @@ git clone https://github.com/Valengp2006/Proyecto_Cosmos.git
 cd Proyecto_Cosmos
 ```
 
-2. Instalar dependencias:
+2. Entrar a la carpeta `Servidor`
+
+```bash
+cd Servidor
+```
+
+3. Instalar dependencias:
 
 ```bash
 npm install
 ```
+
+> [!NOTE]
+> Si se trabaja con Windows asegurarse de tener instalado `GitBash`, si es con MacOS se puede trabajar desde la terminal.
 
 **Ejecución del sistema**
 
 1. Iniciar el servidor:
 
 ```bash
+cd Servidor
 node server.js
 ```
 
@@ -95,8 +105,9 @@ node server.js
 
 4. Conectar Open Stage Control:
 
-- Abrir interfaz del performer
-- Probar slider y botón reset
+- Abrir el archivo `LauncherConfig` con la configuración del launcher de Open Stage Control
+- Abrir el archivo `ClientUI` con la interfaz del performer
+- Probar los slider y botón reset
 
 5. Conectar público:
 
@@ -106,6 +117,10 @@ node server.js
 ```
 http://[IP-del-servidor]:3000
 ```
+
+> [!NOTE]
+> Para Windows: escribe `ipconfig` y presiona `Enter`.Busca la línea que dice `Dirección IPv4`
+> Para Mac: usa `ifconfig` y busca la sección `inet`
 
 6. Verificar funcionamiento:
 
