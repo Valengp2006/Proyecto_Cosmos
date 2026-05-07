@@ -62,7 +62,7 @@ El proyecto utiliza una arquitectura de red local distribuida mediante **OSC** y
 1. Clonar el repositorio:
 
 ```bash
-git clone https://github.com/Valengp2006/Proyecto_Cosmos
+git clone https://github.com/Valengp2006/Proyecto_Cosmos.git
 cd Proyecto_Cosmos
 ```
 
