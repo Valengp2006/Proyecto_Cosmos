@@ -119,8 +119,8 @@ http://[IP-del-servidor]:3000
 ```
 
 > [!NOTE]
-> Para Windows: escribe `ipconfig` y presiona `Enter`.Busca la línea que dice `Dirección IPv4`
-> Para Mac: usa `ifconfig` y busca la sección `inet`
+> **Para Windows:** escribe `ipconfig` y presiona `Enter`.Busca la línea que dice `Dirección IPv4`.
+> **Para Mac:** usa `ifconfig` y busca la sección `inet`
 
 6. Verificar funcionamiento:
 
