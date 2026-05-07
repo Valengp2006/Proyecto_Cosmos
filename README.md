@@ -2,7 +2,34 @@
 
 Cosmos es un ecosistema audiovisual vivo moldeado por la interacción colectiva. La obra propone un diálogo a tres bandas: un pulso sonoro constante, un performer que guía la tensión narrativa a través de estados visuales (de un campo de estrellas a un vórtice profundo), y un público activo que, mediante sus propios dispositivos, tiñe e interviene la instalación en tiempo real. Es una exploración de cómo las interfaces web pueden difuminar la barrera entre el espectador y la obra.
 
-## Arquitectura Tecnológica y Puertos
+## 1. Diagrama del sistema:
+
+El sistema de la obra *Cosmos* se estructura como un ecosistema interactivo en tiempo real compuesto por cuatro componentes principales: **audio, visuales, performer y público**, conectados mediante protocolos de comunicación que permiten el flujo continuo de datos.
+
+```mermaid
+graph LR
+    subgraph Audiencia
+        P[📱 Smartphones del Público<br>Interfaz Web]
+    end
+
+    subgraph Sistema Central [💻 Computador Principal]
+        N[🟢 Node.js<br>Servidor Socket.io<br>Puerto 3000]
+        TD[🟣 TouchDesigner<br>Motor Visual]
+        S[🟡 Strudel<br>Motor de Audio]
+        OSC[⚪ Open Stage Control<br>Performer]
+    end
+
+    P -- "WebSocket (Socket.io)" --> N
+    N -- "OSC (Puerto 7000)" --> TD
+    S -- "OSC (Puerto 8080)" --> TD
+    OSC -- "OSC (Puerto 9000)" --> TD
+```
+
+**Descripción del flujo de datos:**
+
+- El **audio generado en Strudel** envía eventos mediante OSC a TouchDesigner, activando cambios visuales en tiempo real.
+- El **performer**, a través de Open Stage Control, controla la transición estructural de la obra.
+- El **público**, desde sus dispositivos móviles, envía información de color mediante Socket.io hacia un servidor Node.js, que traduce estos datos a OSC para modificar parámetros visuales.
 
 El proyecto utiliza una arquitectura de red local distribuida mediante **OSC** y **WebSockets** para garantizar comunicación simultánea y fluida.
 
@@ -12,7 +39,120 @@ El proyecto utiliza una arquitectura de red local distribuida mediante **OSC** y
 | **Performer** | iPad (Open Stage Control) | `9000` (UDP) | Controla la transición de estados (Estrellas → Vórtice) y el ciclo evolutivo de la obra. |
 | **Público** | Smartphones (Node.js + Socket.io) | `7000` (UDP) | Envía datos de color RGB en tiempo real para teñir la Luna. |
 
-## Estructura del Repositorio
+## 2. Paso a paso para reproducir la obra
+
+**Requisitos previos**
+
+**Hardware:**
+
+- Computador (Mac o Windows)
+- Dispositivo móvil (celular)
+- Tablet (opcional, para control del performer)
+
+**Software:**
+
+- TouchDesigner
+- Node.js
+- Navegador web
+- Open Stage Control
+- Strudel
+
+**Instalación**
+
+1. Clonar el repositorio:
+
+```bash
+git clone https://github.com/Valengp2006/Proyecto_Cosmos
+cd Proyecto_Cosmos
+```
+
+2. Instalar dependencias:
+
+```bash
+npm install
+```
+
+**Ejecución del sistema**
+
+1. Iniciar el servidor:
+
+```bash
+node server.js
+```
+
+2. Abrir TouchDesigner:
+
+- Cargar el archivo `.toe`
+- Verificar recepción OSC en puertos:
+  - 8080 (audio)
+  - 9000 (performer)
+  - 7000 (público)
+
+3. Ejecutar Strudel:
+
+- Iniciar la partitura
+- Verificar envío de datos OSC
+
+4. Conectar Open Stage Control:
+
+- Abrir interfaz del performer
+- Probar slider y botón reset
+
+5. Conectar público:
+
+- Conectar dispositivos a la misma red
+- Acceder a:
+
+```
+http://[IP-del-servidor]:3000
+```
+
+6. Verificar funcionamiento:
+
+- La luna cambia de color
+- Las visuales responden al performer
+- Existe sincronización con el audio
+- No hay latencia perceptible
+
+## 3. Explicación y justificación
+
+### Funcionamiento del sistema
+
+El sistema se organiza en cuatro componentes:
+
+- **Audio (Strudel):** genera la estructura sonora en tiempo real y define la evolución temporal.
+- **Visuales (TouchDesigner):** construyen el entorno visual mediante partículas y reaccionan a inputs externos.
+- **Performer (Open Stage Control):** controla la transición entre estados visuales.
+- **Público (Web + Socket.io):** interviene modificando el color de la luna en tiempo real.
+
+### Justificación técnica
+
+- **OSC:** permite comunicación eficiente y en tiempo real entre audio y visuales.
+- **Socket.io:** facilita la interacción multiusuario desde navegadores.
+- **Node.js:** actúa como puente entre web y sistema visual.
+- **TouchDesigner:** permite crear visuales complejas y reactivas.
+- **Strudel:** permite generar estructuras sonoras dinámicas mediante live coding.
+
+Estas herramientas permiten construir un sistema modular, estable y en tiempo real.
+
+### Justificación estética
+
+- La obra utiliza una estética espacial basada en nebulosas y cuerpos celestes.
+- La paleta de colores (morado, rosado, naranja) está inspirada en imágenes astronómicas.
+- El uso de partículas permite representar procesos de formación y movimiento.
+- La luna funciona como elemento central y punto de conexión con el público.
+
+### Relación concepto–técnica
+
+El sistema distribuye el control de la experiencia:
+
+- El **audio** define el tiempo
+- El **performer** define la estructura
+- El **público** introduce variación
+
+Esto convierte la obra en un sistema dinámico donde múltiples agentes influyen en un mismo entorno.
+
+## 4. Estructura del Repositorio
 
 El repositorio está organizado en módulos independientes para facilitar su ejecución y comprensión:
 
@@ -20,22 +160,4 @@ El repositorio está organizado en módulos independientes para facilitar su eje
 - `/Servidor`: Entorno de Node.js, incluyendo `server.js` y la carpeta `/public` con la interfaz del espectador (`index.html`).
 - `/Control`: Layout de configuración de interfaz para Open Stage Control.
 - `/Audio`: Archivos de texto plano con la partitura generativa escrita en Strudel.
-
-## Manual de Operación (Cómo ejecutar la obra)
-
-Para que el ecosistema funcione sin latencia y evadiendo restricciones o firewalls institucionales, el sistema está diseñado para ejecutarse sobre un **Hotspot móvil (Punto de acceso personal)**.
-
-### 1. Preparación de Red
-
-1.  Activar el Hotspot desde el dispositivo móvil del host.
-2.  Conectar todos los equipos centrales (MacBook Pro, iPad) a esta red.
-3.  Obtener la IP Local de la máquina host (Ej. `172.20.10.7`) para configurar los servidores.
-
-### 2. Secuencia de Inicio
-
-1.  **Audio:** Cargar el script de la carpeta `/Audio` en Strudel y verificar la salida de paquetes hacia el puerto `8080`.
-2.  **Visuales:** Abrir el `.toe` en TouchDesigner. Confirmar que los tres nodos receptores (`TDStrudelSync`, `oscin1`, `oscin2`) estén activos en sus respectivos puertos.
-3.  **Performer:** Iniciar Open Stage Control (`port: 8082`, `send: 127.0.0.1:9000`). Abrir la interfaz web en el iPad.
-4.  **Público:** En la terminal del computador, navegar a la carpeta `/Servidor` y ejecutar `node server.js`. El público accederá escaneando un código QR que apunta a `http://[IP_DEL_HOST]:3000`.
-
-*Desarrollo técnico e integración de sistemas generativos.*
+  
