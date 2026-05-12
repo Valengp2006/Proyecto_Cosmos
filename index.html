@@ -490,6 +490,249 @@
     font-size: 0.8rem;
   }
 
+  /* ── DIAGRAM ── */
+  .diagram-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+  }
+
+  .dnode {
+    padding: 1.2rem 1.5rem;
+    border: 1px solid rgba(200,168,245,0.15);
+    background: rgba(255,255,255,0.02);
+    text-align: center;
+    min-width: 130px;
+    position: relative;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .dnode:hover {
+    border-color: rgba(200,168,245,0.35);
+    background: rgba(124,77,255,0.06);
+  }
+
+  .dnode-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
+  .dnode-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; }
+  .dnode-sub  { font-size: 0.65rem; color: var(--muted); margin-top: 0.2rem; }
+
+  .node-center { border-color: rgba(124,77,255,0.4); min-width: 160px; }
+  .node-center .dnode-name { color: var(--accent); font-size: 1rem; }
+  .td-ports { display: flex; gap: 0.4rem; justify-content: center; margin-top: 0.6rem; flex-wrap: wrap; }
+
+  .darrow {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0 0.5rem;
+  }
+
+  .darrow-label {
+    font-size: 0.55rem;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+  }
+
+  .darrow-line {
+    width: 50px; height: 1px;
+    background: linear-gradient(90deg, rgba(124,77,255,0.4), rgba(79,195,247,0.4));
+  }
+
+  .darrow-tip { color: var(--glow); font-size: 0.7rem; line-height: 1; }
+
+  .side-nodes {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-left: 2.5rem;
+    position: relative;
+  }
+
+  .side-nodes::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 50%;
+    width: 2rem;
+    height: 1px;
+    background: rgba(124,77,255,0.3);
+  }
+
+  .side-node {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .side-label {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  /* ── JUSTIFICATION ── */
+  .just-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 3rem;
+  }
+
+  .just-heading {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .just-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .just-items { display: flex; flex-direction: column; gap: 1.2rem; }
+
+  .just-item {
+    padding: 1rem 1.2rem;
+    border-left: 2px solid rgba(200,168,245,0.15);
+    transition: border-color 0.3s;
+  }
+
+  .just-item:hover { border-left-color: var(--glow); }
+
+  .just-tool {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+
+  .just-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.7; }
+
+  .concept-note {
+    margin-top: 3.5rem;
+    padding: 2rem;
+    border: 1px solid rgba(200,168,245,0.1);
+    background: rgba(124,77,255,0.04);
+    position: relative;
+  }
+
+  .concept-note-label {
+    position: absolute;
+    top: -0.55rem;
+    left: 1.5rem;
+    background: var(--deep);
+    padding: 0 0.8rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--glow);
+    text-transform: uppercase;
+  }
+
+  .concept-note p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  .concept-note strong { color: var(--text); }
+
+  /* ── REQUIREMENTS & INSTALL ── */
+  .req-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2.5rem 0;
+  }
+
+  .req-col {
+    padding: 1.5rem;
+    border: 1px solid rgba(200,168,245,0.1);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .req-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(200,168,245,0.1);
+  }
+
+  .req-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .req-item {
+    font-size: 0.8rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .install-block { margin-bottom: 3rem; }
+
+  .install-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    color: var(--glow);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .code-block {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(200,168,245,0.1);
+    border-left: 3px solid var(--glow);
+    padding: 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--cold);
+    line-height: 1.9;
+    margin-bottom: 0.8rem;
+    overflow-x: auto;
+  }
+
+  .code-comment { color: rgba(138,132,160,0.5); }
+
+  .install-note {
+    font-size: 0.72rem;
+    color: var(--muted);
+    padding: 0.6rem 1rem;
+    border-left: 2px solid rgba(200,168,245,0.2);
+  }
+
+  .install-note code {
+    background: rgba(124,77,255,0.12);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    color: var(--cold);
+  }
+
+  @media (max-width: 768px) {
+    .just-grid  { grid-template-columns: 1fr; gap: 2rem; }
+    .req-grid   { grid-template-columns: 1fr; }
+    .side-nodes { margin-left: 0; margin-top: 1rem; }
+    .diagram-wrap { flex-direction: column; }
+    .darrow { flex-direction: row; }
+    .darrow-line { width: 30px; }
+  }
+
   /* ── FOOTER ── */
   footer {
     position: relative;
@@ -732,6 +975,72 @@
 
 <div class="divider"></div>
 
+<!-- DIAGRAM -->
+<section id="diagram">
+  <div class="container">
+    <p class="section-label">Flujo de datos</p>
+    <h2 class="section-title">Diagrama<br>del sistema</h2>
+    <p style="color:var(--muted);font-size:0.85rem;max-width:600px;line-height:1.8;margin-bottom:3rem;">Cada componente habla con TouchDesigner en tiempo real. El público entra por web, el performer por tablet, el audio por live coding.</p>
+    <div class="diagram-wrap">
+      <!-- Público -->
+      <div class="dnode node-public">
+        <div class="dnode-icon">📱</div>
+        <div class="dnode-name">Smartphones</div>
+        <div class="dnode-sub">Interfaz Web</div>
+      </div>
+      <div class="darrow">
+        <span class="darrow-label">WebSocket<br>Socket.io</span>
+        <div class="darrow-line"></div>
+        <div class="darrow-tip">▶</div>
+      </div>
+      <!-- Node.js -->
+      <div class="dnode node-node">
+        <div class="dnode-icon">🟢</div>
+        <div class="dnode-name">Node.js</div>
+        <div class="dnode-sub">Puerto 3000</div>
+      </div>
+      <div class="darrow">
+        <span class="darrow-label">OSC<br>Puerto 7000</span>
+        <div class="darrow-line"></div>
+        <div class="darrow-tip">▶</div>
+      </div>
+      <!-- TD (centro) -->
+      <div class="dnode node-td node-center">
+        <div class="dnode-icon">🟣</div>
+        <div class="dnode-name">TouchDesigner</div>
+        <div class="dnode-sub">Motor Visual</div>
+        <div class="td-ports">
+          <span class="port-badge">7000</span>
+          <span class="port-badge">8080</span>
+          <span class="port-badge">9000</span>
+        </div>
+      </div>
+
+      <!-- Strudel (arriba) y OSC (abajo) apuntan a TD -->
+      <div class="side-nodes">
+        <div class="side-node">
+          <div class="dnode node-audio">
+            <div class="dnode-icon">🟡</div>
+            <div class="dnode-name">Strudel</div>
+            <div class="dnode-sub">Live Coding</div>
+          </div>
+          <div class="side-label">OSC · 8080</div>
+        </div>
+        <div class="side-node">
+          <div class="dnode node-perf">
+            <div class="dnode-icon">⚪</div>
+            <div class="dnode-name">Open Stage Control</div>
+            <div class="dnode-sub">Performer (iPad)</div>
+          </div>
+          <div class="side-label">OSC · 9000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- STRUCTURE -->
 <section id="structure">
   <div class="container">
@@ -769,6 +1078,43 @@
   <div class="container">
     <p class="section-label">Operación</p>
     <h2 class="section-title">Cómo ejecutar<br>la obra</h2>
+
+    <!-- Requisitos -->
+    <div class="req-grid">
+      <div class="req-col">
+        <div class="req-title">Hardware</div>
+        <div class="req-list">
+          <div class="req-item">💻 Computador (Mac o Windows)</div>
+          <div class="req-item">📱 Dispositivo móvil</div>
+          <div class="req-item">📟 Tablet (opcional, performer)</div>
+        </div>
+      </div>
+      <div class="req-col">
+        <div class="req-title">Software</div>
+        <div class="req-list">
+          <div class="req-item">🟣 TouchDesigner</div>
+          <div class="req-item">🟢 Node.js</div>
+          <div class="req-item">🌐 Navegador web</div>
+          <div class="req-item">⚪ Open Stage Control</div>
+          <div class="req-item">🟡 Strudel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instalación -->
+    <div class="install-block">
+      <div class="install-label">Instalación</div>
+      <div class="code-block">
+        <span class="code-comment"># 1. Clonar el repositorio</span><br>
+        git clone https://github.com/Valengp2006/Proyecto_Cosmos.git<br>
+        cd Proyecto_Cosmos<br><br>
+        <span class="code-comment"># 2. Instalar dependencias del servidor</span><br>
+        cd Servidor<br>
+        npm install
+      </div>
+      <div class="install-note">Si usas Windows, asegúrate de tener <code>Git Bash</code> instalado. En macOS usa la Terminal directamente.</div>
+    </div>
+
     <div class="steps">
       <div class="step">
         <div class="step-num">01</div>
@@ -815,6 +1161,72 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- JUSTIFICATION -->
+<section id="justification">
+  <div class="container">
+    <p class="section-label">Contexto</p>
+    <h2 class="section-title">Justificación<br>de la obra</h2>
+    <div class="just-grid">
+      <div class="just-col">
+        <div class="just-heading">
+          <span class="just-dot" style="background:var(--cold)"></span>
+          Técnica
+        </div>
+        <div class="just-items">
+          <div class="just-item">
+            <div class="just-tool">OSC</div>
+            <div class="just-desc">Permite comunicación eficiente y en tiempo real entre audio y visuales con mínima latencia.</div>
+          </div>
+          <div class="just-item">
+            <div class="just-tool">Socket.io</div>
+            <div class="just-desc">Facilita la interacción multiusuario simultánea desde navegadores sin instalación adicional.</div>
+          </div>
+          <div class="just-item">
+            <div class="just-tool">Node.js</div>
+            <div class="just-desc">Actúa como puente entre la web del público y el sistema visual, traduciendo WebSocket a OSC.</div>
+          </div>
+          <div class="just-item">
+            <div class="just-tool">TouchDesigner</div>
+            <div class="just-desc">Permite crear visuales complejas y reactivas en tiempo real con soporte nativo para OSC.</div>
+          </div>
+          <div class="just-item">
+            <div class="just-tool">Strudel</div>
+            <div class="just-desc">Genera estructuras sonoras dinámicas mediante live coding con emisión de eventos OSC integrada.</div>
+          </div>
+        </div>
+      </div>
+      <div class="just-col">
+        <div class="just-heading">
+          <span class="just-dot" style="background:var(--warm)"></span>
+          Estética
+        </div>
+        <div class="just-items">
+          <div class="just-item">
+            <div class="just-tool">Espacio profundo</div>
+            <div class="just-desc">La estética está basada en nebulosas y cuerpos celestes: la inmensidad como metáfora de la experiencia colectiva.</div>
+          </div>
+          <div class="just-item">
+            <div class="just-tool">Paleta cromática</div>
+            <div class="just-desc">Morado, rosado y naranja inspirados en imágenes astronómicas reales de formación estelar.</div>
+          </div>
+          <div class="just-item">
+            <div class="just-tool">Partículas</div>
+            <div class="just-desc">El uso de sistemas de partículas permite representar procesos de formación, colapso y movimiento cósmico.</div>
+          </div>
+          <div class="just-item">
+            <div class="just-tool">La Luna</div>
+            <div class="just-desc">Funciona como elemento central y punto de conexión simbólico con el público, cuyo color es siempre colectivo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="concept-note">
+      <div class="concept-note-label">Relación concepto — técnica</div>
+      <p>El sistema distribuye el control de la experiencia: el <strong>audio</strong> define el tiempo, el <strong>performer</strong> define la estructura, y el <strong>público</strong> introduce la variación. Esto convierte la obra en un sistema dinámico donde múltiples agentes influyen simultáneamente en un mismo entorno.</p>
     </div>
   </div>
 </section>
